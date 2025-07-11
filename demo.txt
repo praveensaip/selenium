@@ -1,0 +1,36 @@
+# expand........
+
+values = driver.execute_script("""
+        let items = arguments[0].attributes;
+        let result = {};
+        for (let i=0; i < items.length; i++){
+            result[items[i].name] = items[i].value        
+        }
+        return result;
+    """, widget_expand)
+    print("valuess", values)
+    driver.execute_script("""   
+        arguments[0].style.width = "1000px";                            
+    """, widget_expand)
+    values = driver.execute_script("""
+        let items = arguments[0].attributes;
+        let result = {};
+        for (let i=0; i < items.length; i++){
+            result[items[i].name] = items[i].value        
+        }
+        return result;
+    """, widget_expand)
+    print("valuess", values)
+    driver.execute_script("""   
+        arguments[0].setAttribute('style','transform: translate3d(10px, 10px, 0px); width: 1000px; height: 1000px; position: absolute;');                            
+    """, widget_expand)
+    print("applied properly")
+    values = driver.execute_script("""
+        let items = arguments[0].attributes;
+        let result = {};
+        for (let i=0; i < items.length; i++){
+            result[items[i].name] = items[i].value        
+        }
+        return result;
+    """, widget_expand)
+    print("valuess", values)
