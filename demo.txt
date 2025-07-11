@@ -1,36 +1,21 @@
-# expand........
+pie chart -00001
 
-values = driver.execute_script("""
-        let items = arguments[0].attributes;
-        let result = {};
-        for (let i=0; i < items.length; i++){
-            result[items[i].name] = items[i].value        
-        }
-        return result;
-    """, widget_expand)
-    print("valuess", values)
-    driver.execute_script("""   
-        arguments[0].style.width = "1000px";                            
-    """, widget_expand)
-    values = driver.execute_script("""
-        let items = arguments[0].attributes;
-        let result = {};
-        for (let i=0; i < items.length; i++){
-            result[items[i].name] = items[i].value        
-        }
-        return result;
-    """, widget_expand)
-    print("valuess", values)
-    driver.execute_script("""   
-        arguments[0].setAttribute('style','transform: translate3d(10px, 10px, 0px); width: 1000px; height: 1000px; position: absolute;');                            
-    """, widget_expand)
-    print("applied properly")
-    values = driver.execute_script("""
-        let items = arguments[0].attributes;
-        let result = {};
-        for (let i=0; i < items.length; i++){
-            result[items[i].name] = items[i].value        
-        }
-        return result;
-    """, widget_expand)
-    print("valuess", values)
+e@ DiStPiution: Heroesditddc1f092K@1 08331f29-b97d-4. ¢ 1/19 >
+
+e60fb313-d317-4037-8763-9051ad61583d o5fodf58-044e-49dd-89ad-88de1f092b21
+d78274e1-d2a2-4fb9-8f33-4fbbcO85a642 08331f29-b97d-4a8c-a3a3-f51f13979672
+cbab9042-eee0-412b-9f62-689ebc515c2a 15bfc570-bc47-4ed9-a519-81fobaadcdea
+caa0d9ba-44e0-42b2-b302-5db9967fffa8 165bc688-1dd3-40a0-a406-0869a1bc5177
+baae26f1-c519-4e79-bd2f-ade661935186 166f9bc9-1387-4ca5-87ac-7279e9398798
+acf5dala-846a-498a-8465-4c32dcfeafbe 2deb2ad6-3743-4e9b-b966-d5d08a036958
+8c43e7fb-e7db-44b1-8/66-beda5112d46e 273349f7-8e42-44b0-9142-d27164863402
+2flfebca-89f4-4266-a3c7-deedfabs9bcd
+
+Calcualted Incen
+
+66612¢69-2951-412a-816b-9f24bf3e3cbd
+48239da4-a176-4924-9773-7d951236ca59
+
+3244780f-148f-4647-8725-da1623532d6d
+
+07/11/2025 03:38 PM

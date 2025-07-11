@@ -37,14 +37,7 @@ class listpage(baseclass):
                     if ele.text.strip() == report_name:
                         ele.click()
                         break
-                    # print("elementss",ele)
-                    # data = list(ele.find_elements(By.TAG_NAME,'td'))
-                    # print("data", data, len(data))
-                    # report_name1 = data[1].text.strip()
-                    # print("report_name", report_name1, report_name)
-                    # if report_name1 == report_name.text.strip():
-                    #     self.driver.execute_script("documents[0].click();",data[1])
-                    #     break
+                    
             except Exception:
                 self.driver.refresh()
                 for ele in self.driver.find_elements(By.XPATH,'//table//tbody//tr'):

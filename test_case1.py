@@ -13,6 +13,7 @@ from faker import Faker
 faker = Faker()
 random_name = lambda : faker.first_name()+" "+faker.last_name()
 report_name = random_name()
+
 @pytest.mark.skip(reason="Not Implemented")
 class Testlogin:
     def test_login(self,driver,waitforelementinvisibility,get_localstorage):
@@ -36,7 +37,7 @@ class TestAccessingQUICKreports:
                             ("Project Inhouse Anb",["id","kw","kwh","Project Code","Project Name"]),
                             ("Dash Board Chart",["Calculated Kw","Calculated Kwh","id","Updated By"])]
     
-    @pytest.mark.skip(reason="Not Implemented")
+    # @pytest.mark.skip(reason="Not Implemented")
     def test_login_quickreports(self,driver, set_token):
         print("self.name1", report_name)
         set_token(self.open_url, self.landing_url,'localstorage')
@@ -79,7 +80,7 @@ class TestAccessingQUICKreports:
         page = listpage(driver)
         page.matched()
         page.assertingicon()
-        page.report_select("Nicholas Harrison")
+        page.report_select(report_name)
         for i in range(self.length+1):  
             page1 = Widget_Creation(driver)
             time.sleep(10)
