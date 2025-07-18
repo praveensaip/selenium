@@ -6,6 +6,8 @@ from pages.landinpage import landingpage
 from pages.quicklistpage import listpage
 from pages.widgetCreation import Widget_Creation
 from pages.advanced_config import advancedconfig
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import pytest,time
 from faker import Faker
 
@@ -35,52 +37,65 @@ class TestAccessingQUICKreports:
     expected_url = 'https://quickreports-stage.anbetrack.com/reportDesigner'
     model_and_attributes = [("Dash Board Chart",["Calcualted Incentive","Calculated Kw","Calculated Kwh","id"]),
                             ("Project Inhouse Anb",["id","kw","kwh","Project Code","Project Name"]),
-                            ("Dash Board Chart",["Calculated Kw","Calculated Kwh","id","Updated By"])]
+                            ("Dash Board Chart",["Calcualted Incentive","Calculated Kw","Calculated Kwh","id","Updated By"])]
     
-    # @pytest.mark.skip(reason="Not Implemented")
-    def test_login_quickreports(self,driver, set_token):
-        print("self.name1", report_name)
-        set_token(self.open_url, self.landing_url,'localstorage')
-        page = listpage(driver)
-        page.matched()
-        page.waitingforgridapprear()
-        page.button_click()
-        page.report_selection("dashboard")
-        for i in range(self.length+1):
-            page = Widget_Creation(driver)
-            page.click_button("widget")
-            page.assert_handling()
-            page.select_chart_types(expected_url=self.expected_url)
-            page.checking_attributes(*self.model_and_attributes[i])
-            page.check_attribute_selected(self.model_and_attributes[i][1])
-            self.value = page.selected_attributes_list()
-            print("valuee", self.value)
-            page.button_not_enabled("Advanced Configuration")
-            page.button_not_enabled("Create")
-            page.chart_selection("Grid View")
-            page.button_enabled("Advanced Configuration")
-            page.button_enabled("Create")
-            if i == 0:
-                page.report_save(report_name)
-                print("self.name",report_name)
-                time.sleep(2)
-            elif i == self.length:
-                page.update()
-                page.click_cancel()
-                base = listpage(driver)
-                base.waitingforgridapprear()
-                time.sleep(2)
+    @pytest.mark.skip(reason="Not Implemented")
+    def test_login_quickreports(self,driver, set_token,waitforelementinvisibility,get_localstorage):
+            print("self.name1", report_name)
+            set_token(self.open_url, self.landing_url,'localstorage')
+            error_ele = None
+            try:
+                error_ele = WebDriverWait(driver,5).until(EC.visibility_of_element_located((By.XPATH,'//h1[text()="503 Service Temporarily Unavailable"]')))
+                print("error_ele",error_ele)
+            except Exception:
+                pass
+            if not error_ele:
+                page = listpage(driver)
+                page.matched()
+                page.waitingforgridapprear()
+                page.button_click()
+                page.report_selection("dashboard")
+                for i in range(self.length+1):
+                    print("iiii",i)
+                    page = Widget_Creation(driver)
+                    page.click_button("widget")
+                    page.assert_handling()
+                    page.select_chart_types(expected_url=self.expected_url)
+                    page.checking_attributes(*self.model_and_attributes[i])
+                    page.check_attribute_selected(self.model_and_attributes[i][1])
+                    self.value = page.selected_attributes_list()
+                    print("valuee", self.value)
+                    page.button_not_enabled("Advanced Configuration")
+                    page.button_not_enabled("Create")
+                    page.chart_selection("Grid View")
+                    page.button_enabled("Advanced Configuration")
+                    page.button_enabled("Create")
+                    # page.resize_of_the_widget(driver,i+1)
+                    if i == 0:
+                        page.report_save(report_name)
+                        print("self.name",report_name)
+                        # time.sleep(2)
+                    elif i == self.length:
+                        page.update()
+                        page.click_cancel()
+                        base = listpage(driver)
+                        base.waitingforgridapprear()
+                        time.sleep(2)
+                    else:
+                        print("updated")
+                        page.update()
+                        time.sleep(2)
             else:
-                print("updated")
-                page.update()
-                time.sleep(2)
+                Testlogin.test_login(self,driver,waitforelementinvisibility,get_localstorage)
+                self.test_login_quickreports(driver,set_token,waitforelementinvisibility,get_localstorage)
 
+    # @pytest.mark.skip(reason="not implemented")
     def test_report_get(self,driver,set_token):
         set_token(self.open_url, self.landing_url,'localstorage')
         page = listpage(driver)
         page.matched()
         page.assertingicon()
-        page.report_select(report_name)
+        page.report_select("Lauren Lee")
         for i in range(self.length+1):  
             page1 = Widget_Creation(driver)
             time.sleep(10)

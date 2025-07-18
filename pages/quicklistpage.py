@@ -21,30 +21,56 @@ class listpage(baseclass):
 
     def button_click(self):
         self.findusinginvisibility(*self.invisibility)
+        self.findusingvisibility(*self.report_button)
         self.click(*self.report_button)
 
     def report_selection(self, report_name):
         self.findusinginvisibility(*self.invisibility)
         self.findusingvisibility(*self.reportselection)
         for i in self.driver.find_elements(*self.reportclick):
+            print("iiii",i.text.strip(), report_name)
             if i.is_displayed() and i.text.strip().lower() == report_name:
+                print("clickedd")
                 i.click()
+                break
+                
     
     def report_select(self, report_name):
-            self.findusingvisibility(By.XPATH,'//table//tbody//tr')
             try:
-                for ele in self.driver.find_elements(By.XPATH,'//table//tbody//tr//td//a'):
-                    if ele.text.strip() == report_name:
-                        ele.click()
-                        break
-                    
-            except Exception:
                 self.driver.refresh()
-                for ele in self.driver.find_elements(By.XPATH,'//table//tbody//tr'):
-                    print(ele)
-                    data = list(ele.find_elements(By.TAG_NAME,'td'))
-                    report_name1 = data[1].text.strip()
-                    if report_name1 == report_name:
-                        data[1].click()
-                        break
-                
+                self.findusingvisibility(By.XPATH,'//table//tbody//tr')
+                try:
+                    for ele in self.driver.find_elements(By.XPATH,'//table//tbody//tr//td//a'):
+                        if ele.text.strip() == report_name:
+                            self.driver.execute_script("arguments[0].scrollIntoView({'block':'center'});",ele)
+                            ele.click()
+                            break
+                    
+                except Exception:
+                    self.driver.refresh()
+                    for ele in self.driver.find_elements(By.XPATH,'//table//tbody//tr'):
+                        print(ele)
+                        data = list(ele.find_elements(By.TAG_NAME,'td'))
+                        report_name1 = data[1].text.strip()
+                        if report_name1 == report_name:
+                            data[1].click()
+                            break
+            except Exception:
+                self.driver.find_element(By.XPATH,'//span[@class="el-pagination__sizes"]//span[@class="el-input__suffix-inner"]').click()
+                self.driver.find_element(By.XPATH,'//div[@class="el-scrollbar"]//span[text()="500/page"]').click()
+                try:
+                    for ele in self.driver.find_elements(By.XPATH,'//table//tbody//tr//td//a'):
+                        if ele.text.strip() == report_name:
+                            self.driver.execute_script("arguments[0].scrollIntoView({'block':'center'});",ele)
+                            ele.click()
+                            break
+                    
+                except Exception:
+                    self.driver.refresh()
+                    for ele in self.driver.find_elements(By.XPATH,'//table//tbody//tr'):
+                        print(ele)
+                        data = list(ele.find_elements(By.TAG_NAME,'td'))
+                        report_name1 = data[1].text.strip()
+                        if report_name1 == report_name:
+                            data[1].click()
+                            break

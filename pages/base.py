@@ -45,6 +45,10 @@ class baseclass:
     
     def matchurl(self,actual_url, expected_url):
         assert actual_url == expected_url, f'{actual_url} is not matched with {expected_url}'  
+
+    def window_navigate(self):
+        return self.driver.current_window_handle
+        
     
     
 

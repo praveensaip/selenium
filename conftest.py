@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as chromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture(params=['chrome'])
@@ -13,9 +13,8 @@ def driver(request):
     if request.param == 'chrome':
         option = ChromeOptions()
         option.add_argument('--start-maximized')
-        driver_path = ChromeDriverManager().install()
-        print("driver_path", driver_path)
-        driver = webdriver.Chrome(service=Service(driver_path),options=option)
+        service = chromeService(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service,options=option)
 
     elif request.param == 'edge':
         option = EdgeOptions()

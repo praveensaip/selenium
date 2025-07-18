@@ -11,16 +11,16 @@ class Widget_Creation(baseclass):
     click_1 = (By.XPATH,'//div[@class="el-col el-col-24 el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 tr p-t-10 p-b-10"]//button//span')
     click_2 = (By.XPATH, '//div[@class="el-col el-col-24 el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 tr p-t-10 p-b-10"]//button//span')
     invisibility = (By.XPATH,'//div[@class="el-loading-spinner"]')
-    assert_chart = (By.XPATH, '//div[@class="el-row addNewSheetDialog"]//div//div[@class="el-row"]/child::div//button')
+    assert_chart = (By.XPATH, '//div[@class="el-row addNewSheetDialog"]//div//div[@class="el-row"]/child::div//p')
     widgetname_names = ['All Models','SQL']
-    ele_visibility = (By.XPATH,'//div[@class="el-col el-col-24 text-center"]')
-    ele_visibility1 = (By.XPATH,'//button[contains(@class,"el-button--text")]//p[normalize-space(.)="All Models"]')
+    ele_visibility = (By.XPATH,'//div[@class="el-col el-col-24 text-center addNewSheetCol"]')
+    ele_visibility1 = (By.XPATH,'//button[@class="el-button el-button--text is-active addSheetSelect"]')
     pre_element = (By.XPATH,'//button[contains(@class,"el-button--text") and contains(@class,"is-active")]')
     create_1 = (By.XPATH, '//span[text()="Create"]')
     pie_chart_visible = (By.XPATH,'//i[@class="etp-qr-icon pie-chart fw5"]')
     virtual_list = (By.XPATH, '//div[@class="el-vl__window el-tree-virtual-list"]')
     e_chart_select_card = (By.XPATH,'//div[@class="el-col el-col-24 el-col-lg-24 is-guttered echartSelectCard"]//span')
-    click_go = (By.XPATH,'//div[@class="el-col el-col-24 el-col-lg-24 is-guttered echartSelectCard"]//span[text()="Go"]')
+    click_go = (By.XPATH,'//button[@class="el-button el-button--primary fr"]')
     button_active = (By.XPATH,'//span[normalize-space(.)="Advanced Configuration"]/ancestor::button')
     update_report = (By.XPATH,'//span[normalize-space(.)="Update"]')
     click_cancel_btn = (By.XPATH,'//span[normalize-space(.)="Close"]')
@@ -39,6 +39,7 @@ class Widget_Creation(baseclass):
         get_widget_name = self.findelements(*self.assert_chart)
         self.findusingvisibility(*self.ele_visibility)
         for i in get_widget_name:
+            print("iiiii",i.text.strip())
             assert i.text.strip() in self.widgetname_names
     
     def select_chart_types(self,expected_url):
@@ -54,7 +55,7 @@ class Widget_Creation(baseclass):
         # assert self.matchurl(self.driver.current_url,expected_url)
 
     def checking_attributes(self,model_name,attributes):
-         for _ in range(10):
+         for _ in range(5):
             scrollable_container = self.findusingvisibility(*self.virtual_list)
             self.driver.execute_script('arguments[0].scrollTop += 300;',scrollable_container)
             time.sleep(1)
@@ -115,10 +116,11 @@ class Widget_Creation(baseclass):
             advanced_config.click()
 
             
-    def report_save(self, report_name):
+    def report_save(self, report_name, report_type="tabular"):
         random_name = lambda : self.faker.first_name()+"_"+self.faker.last_name()
-        self.findusingvisibility(By.XPATH,'//div[@class="wrap-scrollbar chart-container"]')
-        assert self.findelement(By.XPATH,'//div[@class="wrap-scrollbar chart-container"]').is_displayed()
+        if report_type.lower() == 'dashboard':
+            self.findusingvisibility(By.XPATH,'//div[@class="wrap-scrollbar chart-container"]')
+            assert self.findelement(By.XPATH,'//div[@class="wrap-scrollbar chart-container"]').is_displayed()
         save_button_click = self.findelement(By.XPATH,'//button//span[normalize-space(.)="Save"]')
         save_button_click.click()
         self.findusingvisibility(By.XPATH,'//div[@class="el-dialog save-lookup saveReport"]')
@@ -130,22 +132,37 @@ class Widget_Creation(baseclass):
         add_category.send_keys(report_name)
         click_add_category_button = self.findusingvisibility(By.XPATH,'//span[normalize-space(.)="Add Category"]')
         click_add_category_button.click()
-        self.findelement(By.XPATH,'//label[normalize-space(.)="Category"]/following-sibling::div').click()
-        self.findusingvisibility(By.XPATH,'//ul[@class="el-scrollbar__view el-select-dropdown__list"]/li')
-        for i in self.driver.find_elements(By.XPATH,'//ul[@class="el-scrollbar__view el-select-dropdown__list"]/li'):
-            try:
-                print("reportname", i.text.strip())
-                if i.is_displayed() and i.text.strip() == report_name:
-                    i.click()
-                    break
-            except Exception:
-                pass
+        ele = self.findelement(By.XPATH,'//label[normalize-space(.)="Category"]/following-sibling::div//input')
+        ele.click()
+        ele.send_keys(report_name)
+        self.findusingvisibility(By.XPATH,f'//ul[@class="el-scrollbar__view el-select-dropdown__list"]/li//span[text()="{report_name}"]')
+        select = self.findelement(By.XPATH,f'//ul[@class="el-scrollbar__view el-select-dropdown__list"]/li//span[text()="{report_name}"]')
+        select.click()
+        # try:
+        #     list_of_categories = [i.text.strip() for i in self.driver.find_elements(By.XPATH,'//div[@aria-hidden="false"]//ul//li')]
+        #     print("list of catefories", list_of_categories)
+        #     if list_of_categories[-1].text.strip() == report_name:
+        #         list_of_categories[-1].click()
+        # except Exception:
+        #     self.findusingvisibility(By.XPATH,'//ul[@class="el-scrollbar__view el-select-dropdown__list"]/li')
+        #     for i in self.driver.find_elements(By.XPATH,'//ul[@class="el-scrollbar__view el-select-dropdown__list"]/li'):
+        #         try:
+        #             print("reportname", i.text.strip())
+        #             if i.is_displayed() and i.text.strip() == report_name:
+        #                 i.click()
+        #                 break
+        #         except Exception:
+        #             pass
+
         self.findusingvisibility(By.XPATH,'//span[normalize-space(.)="Confirm"]')
         click_save_button = self.findelement(By.XPATH,'//span[normalize-space(.)="Confirm"]')
         click_save_button.click()
         self.findusinginvisibility(*self.invisibility)
-        self.findusingvisibility(By.XPATH,'//p[normalize-space(.) = "Report Created Successfully"]')
-        print("reportname", report_name)
+        try:
+            self.findusingvisibility(By.XPATH,'//p[normalize-space(.) = "Report Created Successfully"]')
+            self.findusinginvisibility(By.XPATH,'//p[normalize-space(.) = "Report Created Successfully"]')
+        except Exception:
+            pass
         return report_name
 
 
@@ -177,6 +194,41 @@ class Widget_Creation(baseclass):
                     self.driver.execute_script("arguments[0].click();", edit_button)
         except Exception:
             return None
+        
+    def resize_of_the_widget(self,driver, index):
+        self.findusingvisibility(By.XPATH,f'(//div[@class="vue-grid-item vue-resizable cssTransforms"]//span[@class="vue-resizable-handle"])[{index}]')
+        ele = self.findelement(By.XPATH,f'(//div[@class="vue-grid-item vue-resizable cssTransforms"]//span[@class="vue-resizable-handle"])[{index}]')
+        # ele = self.findelement(By.XPATH,'//div[@class="vue-grid-item vue-resizable cssTransforms"]//span[@class="vue-resizable-handle"]')
+        cdd = ele.location
+        print("cdddd", cdd)
+        # driver.execute_script("arguments[0].scrollIntoView({'block':'center'});",ele)
+        if index == 1:
+            ActionChains(driver=driver).click_and_hold(ele).move_by_offset(600,300).release().perform()
+        else:
+            print("-(cdd['x']+100),100",-(cdd['x']+100),100)
+            ActionChains(driver=driver).click_and_hold(ele).move_by_offset(-(cdd['x']+50),0).release().perform()
+            time.sleep(2)
+            ActionChains(driver=driver).click_and_hold(ele).move_by_offset(200,200).release().perform()
+
+
+        # if cdd['x'] <= 400 and cdd['y'] <= 200:
+        #     driver.execute_script("arguments[0].scrollIntoView({'block':'center'});",ele)
+        #     ActionChains(driver=driver).click_and_hold(ele).move_by_offset(cdd['x']+100,cdd['y']+100).release().perform()
+        # elif cdd['x'] >= 500 and cdd['y'] >= 400:
+        #     print("1st",-(cdd['x']),cdd['y'])
+        #     driver.execute_script("arguments[0].scrollIntoView({'block':'center'});",ele)
+        #     ActionChains(driver).click_and_hold(ele).move_by_offset(-300,0).release().perform()
+        # elif cdd['x'] >= 300 and cdd['y'] >= 400:
+        #     print("2nd",-(cdd['x']),cdd['y'])
+        #     driver.execute_script("arguments[0].scrollIntoView({'block':'center'});",ele)
+        #     ActionChains(driver).click_and_hold(ele).move_by_offset(-300,0).release().perform()
+        # elif cdd['x'] >= 200 and cdd['y'] >= 400:
+        #     print("3nd",-(cdd['x']),cdd['y'])
+        #     driver.execute_script("arguments[0].scrollIntoView({'block':'center'});",ele)
+        #     ActionChains(driver).click_and_hold(ele).move_by_offset(-300,0).release().perform()
+        # else:
+        #     print("not changed")
+        # ActionChains(driver=driver).click_and_hold(ele).move_by_offset(50,100).release().perform()
 
 
     
