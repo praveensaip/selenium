@@ -22,7 +22,7 @@ faker = Faker()
 random_name = lambda : faker.first_name()+" "+faker.last_name()
 report_name = random_name()
 
-@pytest.mark.skip(reason="Not Implemented")
+# @pytest.mark.skip(reason="Not Implemented")
 class Testlogin:
     def test_login(self,driver,waitforelementinvisibility,get_localstorage):
         driver.get('https://plus-stage.anbetrack.com/#/')

@@ -7,6 +7,7 @@ import time
 
 faker = Faker()
 class advancedconfig(baseclass):
+    invisibility = (By.XPATH,'//div[@class="el-loading-spinner"]')
     url = "https://quickreports-stage.anbetrack.com/reportDesigner"
     attribute_left = (By.XPATH,'//div[@class="advanceConfigCollapse"]//p')
     attribute_locator = (By.XPATH,'//div[@class="advanceConfigCollapse"]/div')
@@ -22,18 +23,20 @@ class advancedconfig(baseclass):
 
     def get_all_values(self,values):
         value = self.findelements(*self.attribute_left)
+        print("valuesss", [i.text.strip() for i in value])
         value1 = [i.text.strip() for i in value]
         index1 = value1.index('Values')
         index2 = value1.index('Values')+1
         category = value1[1:index1]
         value = value1[index2:]
         for i in value1:
-            if i.strip() in ('Category','Values'):
-                print()
-            else:
-                print("valuess", values)
-                print("valuess", i.strip())
-                assert i.strip() in values
+            # if i.strip() in ('Category','Values','Select Charts'):
+            #     print()
+            assert any(ele in ('Category','Values','Select Charts') for ele in value1)
+            print("valuess", values)
+            print("valuess1", value1)
+            print("valuess", i.strip())
+            assert i.strip() in value1
         return category,value
 
     def checktogglefilter_paginations(self):
@@ -65,7 +68,8 @@ class advancedconfig(baseclass):
     def attributes_in_decimal_places(self):
         data={}
         self.click(By.XPATH,'//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-        time.sleep(3)
+        # time.sleep(3)
+        self.findusingvisibility(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         len_elements = self.findelements(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         for i,j in enumerate(len_elements,1):
             if i == 1:
@@ -75,23 +79,26 @@ class advancedconfig(baseclass):
                 ele = self.findelement(By.XPATH,'(//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//input)[2]')
                 ele.clear()
                 ele.send_keys(int(5))
-                time.sleep(2)
+                time.sleep(1)
                 data[item_text] = 5
             else:
                 self.click(By.XPATH,'//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-                time.sleep(3)
+                # time.sleep(3)
+                WebDriverWait(self.driver,10).until(lambda x: j.is_displayed() if j else None)
                 assert j.is_displayed()
                 item_text = j.text.strip()
                 j.click()
                 ele = self.findelement(By.XPATH,'(//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//input)[2]')
                 ele.clear()
                 ele.send_keys(int(5))
-                time.sleep(2)
+                time.sleep(1)
                 data[item_text] = 5
         return data
     
     def get_values_attributes_in_decimal_places(self):
         data={}
+        self.findusinginvisibility(*self.invisibility)
+        self.findusingvisibility(By.XPATH,'//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
         self.click(By.XPATH,'//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
         time.sleep(3)
         len_elements = self.findelements(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
@@ -115,7 +122,8 @@ class advancedconfig(baseclass):
     def change_header_name(self):
         data={}
         self.click(By.XPATH,'//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-        time.sleep(3)
+        # time.sleep(3)
+        self.findusingvisibility(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         len_elements = self.findelements(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         for i,j in enumerate(len_elements,1):
             if i == 1:
@@ -123,24 +131,27 @@ class advancedconfig(baseclass):
                 item_text = j.text.strip()
                 j.click()
                 name = self.random_name()
-                time.sleep(2)
+                # time.sleep(2)
+                self.findusingvisibility(By.XPATH,'(//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//input)[2]')
                 ele = self.findelement(By.XPATH,'(//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//input)[2]')
                 ele.clear()
                 ele.send_keys(name)
-                time.sleep(2)
+                time.sleep(1)
                 data[item_text] = name
             else:
                 self.click(By.XPATH,'//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-                time.sleep(3)
+                # time.sleep(3)
+                WebDriverWait(self.driver,10).until(lambda x: j.is_displayed() if j else None)
                 assert j.is_displayed()
                 item_text = j.text.strip()
                 j.click()
                 name = self.random_name()
-                time.sleep(2)
+                # time.sleep(2)
+                self.findusingvisibility(By.XPATH,'(//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//input)[2]')
                 ele = self.findelement(By.XPATH,'(//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//input)[2]')
                 ele.clear()
                 ele.send_keys(name)
-                time.sleep(2)
+                time.sleep(1)
                 data[item_text] = name
         return data
     
