@@ -100,7 +100,8 @@ class advancedconfig(baseclass):
         self.findusinginvisibility(*self.invisibility)
         self.findusingvisibility(By.XPATH,'//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
         self.click(By.XPATH,'//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-        time.sleep(3)
+        # time.sleep(3)
+        self.findusingvisibility(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         len_elements = self.findelements(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         for i,j in enumerate(len_elements,1):
             if i == 1:
@@ -111,7 +112,8 @@ class advancedconfig(baseclass):
                 data[item_text] = ele.get_attribute("value")
             else:
                 self.click(By.XPATH,'//div[normalize-space(.)="Decimal Places"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-                time.sleep(3)
+                # time.sleep(3)
+                WebDriverWait(self.driver,20).until(lambda x: j.is_displayed() if j else None)
                 assert j.is_displayed()
                 item_text = j.text.strip()
                 j.click()
@@ -158,7 +160,8 @@ class advancedconfig(baseclass):
     def get_values_on_change_header_name(self):
         data={}
         self.click(By.XPATH,'//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-        time.sleep(3)
+        # time.sleep(3)
+        self.findusingvisibility(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         len_elements = self.findelements(By.XPATH,'//div[@class="el-popper is-pure is-light el-select__popper" and @aria-hidden="false"]//ul//li')
         for i,j in enumerate(len_elements,1):
             if i == 1:
@@ -172,7 +175,8 @@ class advancedconfig(baseclass):
 
             else:
                 self.click(By.XPATH,'//div[normalize-space(.)="Customize Column Labels"]/ancestor::div[@class="el-form-item asterisk-left"]//i[@class="el-icon el-select__caret el-select__icon"]')
-                time.sleep(3)
+                # time.sleep(3)
+                WebDriverWait(self.driver,10).until(lambda x: j.is_displayed() if j else None)
                 assert j.is_displayed()
                 item_text = j.text.strip()
                 j.click()
